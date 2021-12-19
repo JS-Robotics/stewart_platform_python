@@ -29,8 +29,8 @@ def distance_calc(ry, ss, h: float = 0,  shift: float = 0, debug: bool = False):
             if debug:
                 print(f"counter odd = {counter} - applied gamma factor: {(counter - 1) / 2}, "
                       f"applied gamma = {applied_gamma}, sign: {(-1)**edge}")
-        x_point[edge] = ry*cos(applied_gamma + shift) + ss * cos(applied_gamma - (-1)**edge * pi/2 + shift)
-        y_point[edge] = ry*sin(applied_gamma + shift) + ss * sin(applied_gamma - (-1)**edge * pi/2 + shift)
+        x_point[edge] = ry*cos(applied_gamma + shift) + ss * cos(applied_gamma + (-1)**counter * pi/2 + shift)
+        y_point[edge] = ry*sin(applied_gamma + shift) + ss * sin(applied_gamma + (-1)**counter * pi/2 + shift)
         counter = counter + 1
     x_point.append(x_point[0])
     y_point.append(y_point[0])
