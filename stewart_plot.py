@@ -1,6 +1,6 @@
 # import numpy as np
 from math import pi, sin, cos
-from quaternion_tools import quaternion_rotation, quaternion_to_euler
+from quaternion_tools import quaternion_rotation, quaternion_to_euler, vector_3d_rotation
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 import matplotlib.animation as animation
@@ -60,4 +60,18 @@ print(f"Calculating: qpq' = {qp}")
 line2, = ax.plot(xq, yq, zq, color='red', marker='o', label='Quaternion rotation 90deg')
 line3, = ax.plot([0, 0, 0], [-1, -1, -1], [0, 2, 3], color='blue', marker='o', label='No-rotation')
 ax.legend(handles=[line1, line2, line3])
-plt.show()
+# plt.show()
+
+rot = 25*pi/180
+v = [1, 0, 0]
+q = [cos(rot/2)*cos(rot/2), 0, sin(rot/2), sin(rot/2)]
+
+q_0 = [cos(rot/8), sin(rot/8), 0, 0]
+q_1 = [cos(rot/2), 0, sin(rot/2), 0]
+q_2 = [cos(rot/4), 0, 0, sin(rot/4)]
+
+print(vector_3d_rotation(v, rot/4, rot, rot/2))
+print(quaternion_rotation(q_2, quaternion_rotation(q_1, quaternion_rotation(q_0, v))))
+
+print(quaternion_rotation(q, v))
+

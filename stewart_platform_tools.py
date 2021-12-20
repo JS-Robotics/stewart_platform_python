@@ -1,5 +1,5 @@
 from math import sin, cos, pi, sqrt
-from quaternion_tools import quaternion_rotation
+from quaternion_tools import quaternion_rotation, vector_3d_rotation
 
 
 def platform_points_2d(long_side: float, short_side: float, height: float = 0,
@@ -33,18 +33,30 @@ def platform_points_2d(long_side: float, short_side: float, height: float = 0,
     return [x_point, y_point, z_point]
 
 
-def cylinder_inverse_kinematic(t_s, p_k, b_k):
+def cylinder_length_quat(t_s, p_k, b_k, theta) :
     # https://www.youtube.com/watch?v=5wCK6XGC3ig&t=253s
-    theta = 0 * pi / 180
+    theta = theta * pi / 180
     q_r = [cos(theta/2), 0, sin(theta/2), 0]
     p_k = quaternion_rotation(q_r, p_k)
+    print(f"p_k_quat = {p_k}")
     i_k = [0, 0, 0]
     i_k[0] = t_s[0] + p_k[0] - b_k[0]
     i_k[1] = t_s[1] + p_k[1] - b_k[1]
     i_k[2] = t_s[2] + p_k[2] - b_k[2]
 
-    print(i_k)
-    print(f"Leg length = {sqrt(i_k[0]**2 + i_k[1]**2 + i_k[2]**2)}")
+    # print(i_k)
+    # print(f"Leg length = {sqrt(i_k[0]**2 + i_k[1]**2 + i_k[2]**2)}")
+
+
+def cylinder_length_euler(t_s, p_k, b_k, theta):
+    theta = theta * pi / 180
+
+    p_k = vector_3d_rotation(p_k, gamma=0, beta=theta, alpha=0)
+    print(f"p_k_euler = {p_k}")
+
+    i_k = [0, 0, 0]
+    # print(i_k)
+    # print(f"Leg length = {sqrt(i_k[0] ** 2 + i_k[1] ** 2 + i_k[2] ** 2)}")
 
 
 if __name__ == '__main__':
@@ -61,4 +73,6 @@ if __name__ == '__main__':
     pa_k = [x_p[0], y_p[0], z_p[0]]
     print(ba_k)
     print(pa_k)
-    cylinder_inverse_kinematic(t_test, ba_k, pa_k)
+    rot = 45
+    cylinder_length_quat(t_test, ba_k, pa_k, 30)
+    cylinder_length_euler(t_test, ba_k, pa_k, 30)
