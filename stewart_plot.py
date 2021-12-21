@@ -60,7 +60,7 @@ print(f"Calculating: qpq' = {qp}")
 line2, = ax.plot(xq, yq, zq, color='red', marker='o', label='Quaternion rotation 90deg')
 line3, = ax.plot([0, 0, 0], [-1, -1, -1], [0, 2, 3], color='blue', marker='o', label='No-rotation')
 ax.legend(handles=[line1, line2, line3])
-# plt.show()
+plt.show()
 
 rot = 25*pi/180
 v = [1, 0, 0]
