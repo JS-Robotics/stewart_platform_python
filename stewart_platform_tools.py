@@ -33,14 +33,19 @@ def platform_points_2d(long_side: float, short_side: float, height: float = 0,
     return [x_point, y_point, z_point]
 
 
-def platform_points_3d(p_i, T, roll, pitch, yaw):
-    q_i = [0, 0, 0]
-    p_i_rot = vector_3d_rotation(p_i, roll, pitch, yaw)
-
-    q_i[0] = T[0] * p_i_rot[0]
-    q_i[1] = T[1] * p_i_rot[1]
-    q_i[2] = T[2] * p_i_rot[2]
-    return q_i
+def platform_points_3d(p_i, t_t, roll, pitch, yaw):
+    q_i_x = [0, 0, 0, 0, 0, 0, 0]
+    q_i_y = [0, 0, 0, 0, 0, 0, 0]
+    q_i_z = [0, 0, 0, 0, 0, 0, 0]
+    for i in range(len(q_i_x)-1):
+        p_i_rot = vector_3d_rotation([p_i[0][i], p_i[1][i], p_i[2][i]], roll, pitch, yaw)
+        q_i_x[i] = t_t[0] + p_i_rot[0]
+        q_i_y[i] = t_t[1] + p_i_rot[1]
+        q_i_z[i] = t_t[2] + p_i_rot[2]
+    q_i_x[-1] = (q_i_x[0])
+    q_i_y[-1] = (q_i_y[0])
+    q_i_z[-1] = (q_i_z[0])
+    return q_i_x, q_i_y, q_i_z
 
 
 def cylinder_length_quat(t_s, p_k, b_k, theta) :

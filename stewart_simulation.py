@@ -2,19 +2,26 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import animation
-from stewart_platform_tools import platform_points_2d
+from stewart_platform_tools import platform_points_2d, platform_points_3d
 
 # First set up the figure, the axis, and the plot element we want to animate
 fig = plt.figure()
 ax = plt.axes(projection='3d')
 line, = ax.plot([], [], lw=2, marker='o')
 
-leg1, = ax.plot([], [], lw=2, marker='o', color='black')
-leg2, = ax.plot([], [], lw=2, marker='o', color='black')
-leg3, = ax.plot([], [], lw=2, marker='o', color='black')
-leg4, = ax.plot([], [], lw=2, marker='o', color='black')
-leg5, = ax.plot([], [], lw=2, marker='o', color='black')
-leg6, = ax.plot([], [], lw=2, marker='o', color='black')
+leg1, = ax.plot([], [], lw=2, color='black')
+leg2, = ax.plot([], [], lw=2, color='black')
+leg3, = ax.plot([], [], lw=2, color='black')
+leg4, = ax.plot([], [], lw=2, color='black')
+leg5, = ax.plot([], [], lw=2, color='black')
+leg6, = ax.plot([], [], lw=2, color='black')
+
+# leg1, = ax.plot([], [], lw=2, marker='o', color='black')
+# leg2, = ax.plot([], [], lw=2, marker='o', color='black')
+# leg3, = ax.plot([], [], lw=2, marker='o', color='black')
+# leg4, = ax.plot([], [], lw=2, marker='o', color='black')
+# leg5, = ax.plot([], [], lw=2, marker='o', color='black')
+# leg6, = ax.plot([], [], lw=2, marker='o', color='black')
 
 start = 100
 end = 100
@@ -33,17 +40,19 @@ s_f = 40
 
 x_f, y_f, z_f = platform_points_2d(l_f, s_f, height=0, rotation_shift=60*3.1415/180)
 line2, = ax.plot(x_f, y_f, z_f, color='red', marker='o', label='Quaternion rotation 90deg')
-
+frames_ = 300
 
 def animate(i):
 
-    h = 12*i/200 + 5
+    x_p, y_p, z_p = platform_points_2d(l_s, s_s, height=0, rotation_shift=0)
     rot = 0
+    h = 12*i/frames_ + 5
     if i <= 100:
         rot = i*3.1415/180*0.2
     else:
         rot = 100*3.1415/180*0.2 - (i-100)*3.1415/180*0.2
-    x_p, y_p, z_p = platform_points_2d(l_s, s_s, height=h, rotation_shift=rot*3)
+    x_p, y_p, z_p = platform_points_3d([x_p, y_p, z_p], [0, h*5, 12], 0, 0, 0)
+    # x_p, y_p, z_p = platform_points_2d(l_s, s_s, height=h, rotation_shift=rot*3)
 
     line.set_data(x_p, y_p)
     line.set_3d_properties(z_p)
@@ -70,7 +79,7 @@ def animate(i):
 
 
 # call the animator.  blit=True means only re-draw the parts that have changed.
-anim = animation.FuncAnimation(fig, animate, frames=200, interval=20, blit=True)
+anim = animation.FuncAnimation(fig, animate, frames=frames_, interval=20, blit=True)
 
 # anim.save('basic_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
 
