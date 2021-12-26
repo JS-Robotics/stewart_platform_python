@@ -33,6 +33,16 @@ def platform_points_2d(long_side: float, short_side: float, height: float = 0,
     return [x_point, y_point, z_point]
 
 
+def platform_points_3d(p_i, T, roll, pitch, yaw):
+    q_i = [0, 0, 0]
+    p_i_rot = vector_3d_rotation(p_i, roll, pitch, yaw)
+
+    q_i[0] = T[0] * p_i_rot[0]
+    q_i[1] = T[1] * p_i_rot[1]
+    q_i[2] = T[2] * p_i_rot[2]
+    return q_i
+
+
 def cylinder_length_quat(t_s, p_k, b_k, theta) :
     # https://www.youtube.com/watch?v=5wCK6XGC3ig&t=253s
     theta = theta * pi / 180
