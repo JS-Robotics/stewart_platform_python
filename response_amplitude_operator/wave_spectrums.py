@@ -49,7 +49,7 @@ def jonswap_wave_spectrum(w, T_p, H_s, y=None):
 if __name__ == "__main__":
     from matplotlib import pyplot as plt
     from matplotlib import animation
-    test = 2
+    test = 1
 
     if test == 0:
         fig = plt.figure()

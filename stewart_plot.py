@@ -2,6 +2,7 @@
 from math import pi, sin, cos
 from quaternion_tools import quaternion_rotation, quaternion_to_euler, vector_3d_rotation
 import matplotlib.pyplot as plt
+
 import mpl_toolkits.mplot3d.axes3d as p3
 import matplotlib.animation as animation
 
