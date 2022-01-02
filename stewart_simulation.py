@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import animation
 
-from response_amplitude_operator.wave_generators import irregular_surface_propagation
+from response_amplitude_operator.wave_generators import irregular_surface_propagation, body_displacement
 from stewart_platform_tools import platform_points_2d, platform_points_3d
 
 # First set up the figure, the axis, and the plot element we want to animate
@@ -42,24 +42,40 @@ s_f = 40
 
 x_f, y_f, z_f = platform_points_2d(l_f, s_f, height=0, rotation_shift=60*3.1415/180)
 line2, = ax.plot(x_f, y_f, z_f, color='red', marker='o', label='Quaternion rotation 90deg')
+
 frames_ = 900
 resolution = frames_
 Tp = 8
-Hs = 8  # 4
+Hs = 4  # 4
 wave_frequencies = []
 for n_step in range(resolution):
     wave_frequencies.append(2 * (n_step + 0.001) / resolution)
-t_time, wave_surface = irregular_surface_propagation(wave_frequencies, Tp, Hs)
+# t_time, wave_surface = irregular_surface_propagation(wave_frequencies, Hs, Tp)
+heave, surge, sway, roll, pitch, yaw, t_time = body_displacement(wave_frequencies, Hs, Tp, 50)
 rot_scale = 1/100
 pos_scale = 1/5
+
+figs, (ax1, ax2) = plt.subplots(2)
+line1 = ax1.plot(t_time, heave, label='heave [m]')
+line2 = ax1.plot(t_time, surge, label='surge [m]')
+line3 = ax1.plot(t_time, sway, label='sway [m]')
+line4 = ax2.plot(t_time, roll, label='roll [rad]')
+line5 = ax2.plot(t_time, pitch, label='pitch [rad]')
+line6 = ax2.plot(t_time, yaw, label='yaw [rad]')
+ax1.grid(color='black', linestyle='-', linewidth=0.5)
+ax2.grid(color='black', linestyle='-', linewidth=0.5)
+ax1.legend()
+ax2.legend()
 
 
 def animate(i):
 
     x_p, y_p, z_p = platform_points_2d(l_s, s_s, height=0, rotation_shift=0)
-    x_p, y_p, z_p = platform_points_3d([x_p, y_p, z_p], [wave_surface[i]*pos_scale, -wave_surface[i]*pos_scale,
-                                                         wave_surface[i]+12], -wave_surface[i]*rot_scale/3,
-                                                         wave_surface[i]*rot_scale/3, wave_surface[i]*rot_scale*5)
+    # x_p, y_p, z_p = platform_points_3d([x_p, y_p, z_p], [wave_surface[i]*pos_scale, -wave_surface[i]*pos_scale,
+    #                                                      wave_surface[i]+12], -wave_surface[i]*rot_scale/3,
+    #                                                      wave_surface[i]*rot_scale/3, wave_surface[i]*rot_scale*5)
+
+    x_p, y_p, z_p = platform_points_3d([x_p, y_p, z_p], [surge[i]/2, sway[i]/2, heave[i]/2 + 10], roll[i]/100, pitch[i]/100, yaw[i]/100)
 
     line.set_data(x_p, y_p)
     line.set_3d_properties(z_p)
