@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import animation
 
-from response_amplitude_operator.wave_generators import irregular_surface_propagation, body_displacement
+from stochastic_waves.wave_generators import irregular_surface_propagation, body_displacement
 from stewart_platform_tools import platform_points_2d, platform_points_3d
 
 # First set up the figure, the axis, and the plot element we want to animate

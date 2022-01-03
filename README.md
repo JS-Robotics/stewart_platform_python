@@ -12,6 +12,8 @@ https://www.usna.edu/NAOE/academics/en455.php -- USNA - EN455
 
 https://rules.dnv.com/docs/pdf/DNV/CG/2018-01/DNVGL-CG-0130.pdf -- DNVGL 0130
 
+
+https://www.calqlata.com/productpages/00081-help.html -- RAO calculations
 Google searches:
 
     vessel have to pitch phase shift

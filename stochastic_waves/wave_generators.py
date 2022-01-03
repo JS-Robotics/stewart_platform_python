@@ -1,4 +1,4 @@
-from response_amplitude_operator import wave_spectrums
+from stochastic_waves import wave_spectrums
 import random
 from math import pi, sqrt, cos, sin
 
