@@ -21,3 +21,5 @@ https://www.calqlata.com/productpages/00081-help.html -- RAO calculations
 Google searches:
 
     vessel have to pitch phase shift
+
+https://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/ -- Good tutorial for matplotlib animations
