@@ -1,3 +1,7 @@
+# Stewart Platform Inverse Kinematics Simulation with stochastic JONSWAP waves
+
+![alt text](misc/figures/thumbnail.png)
+
 https://catlikecoding.com/unity/tutorials/flow/waves/  -- Wave shader
 
 https://www.orcina.com/webhelp/OrcaFlex/Content/html/Vesseltheory,RAOsandphases.htm -- RAO calulation

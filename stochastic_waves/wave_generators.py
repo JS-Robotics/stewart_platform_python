@@ -51,7 +51,6 @@ def body_displacement(w, H_s, T_p, wave_direction=0, y=None, x=None):
     pitch = []
     yaw = []
 
-    s_list_sp, amps, phases = irregular_waves(w, H_s, T_p, y, x)
     sim_time = []  # TODO make dynamic
     time_resolution = 3000  # TODO make a better method of adding a simulation time
     for n in range(time_resolution):
@@ -92,6 +91,7 @@ def body_displacement(w, H_s, T_p, wave_direction=0, y=None, x=None):
     print(f"pitch_amp = {pitch_amp}")
     print(f"yaw_amp = {yaw_amp}")
 
+    s_list_sp, amps, phases = irregular_waves(w, H_s, T_p, y, x)
     for i in range(len(sim_time)):
         _heave = 0
         _surge = 0
