@@ -22,16 +22,16 @@ The wave elevation at time, t, at distance from calculation origin, x, is calcul
 from **DNVGL-CG-0130**
 
 <p align="center">
-    <img src="misc/figures/eq_1.PNG"  />
+    <img src="misc/figures/eq_1.PNG" />
 </p>
 <p align="center">
-    <img src="misc/figures/eq_2.PNG"  />
+    <img src="misc/figures/eq_2.PNG" />
 </p>
 <p align="center">
-    <img src="misc/figures/eq_3.PNG"  />
+    <img src="misc/figures/eq_3.PNG" />
 </p>
 <p align="center">
-    <img src="misc/figures/eq_4.PNG"  />
+    <img src="misc/figures/eq_4.PNG" />
 </p>
 
 A "raft in slow waves" assumption is made when calculating the 6 degree of freedom body
