@@ -1,49 +1,6 @@
 from math import sin, cos, pi, sqrt
-
-
-def quaternion_rotation(q, p):
-    if len(q) != 4:
-        print(f"size of quaternion q != 4, actual size: {len(q)}")
-        return -1
-    if len(p) != 3:
-        print(f"size of vector point p != 3, actual size: {len(p)}")
-        return -1
-
-    q_rot_mat = [
-        2*q[0]*q[0] - 1 + 2*q[1]*q[1], 2*q[1]*q[2] - 2*q[0]*q[3], 2*q[1]*q[3] + 2*q[0]*q[2],
-        2*q[1]*q[2] + 2*q[0]*q[3], 2*q[0]**2 - 1 + q[2]**2, 2*q[2]*q[3] - 2*q[0]*q[1],
-        2*q[1]*q[3] - 2*q[0]*q[2], 2*q[2]*q[3] + 2*q[0]*q[1], 2*q[0]*q[0] - 1 + 2*q[3]*q[3]
-    ]
-
-    rot = [
-        q_rot_mat[0]*p[0] + q_rot_mat[1]*p[1] + q_rot_mat[2]*p[2],
-        q_rot_mat[3]*p[0] + q_rot_mat[4]*p[1] + q_rot_mat[5]*p[2],
-        q_rot_mat[6] * p[0] + q_rot_mat[7] * p[1] + q_rot_mat[8] * p[2],
-    ]
-    return rot
-
-
-def vector_3d_rotation(vector3, alpha, beta, gamma):
-    c1 = cos(alpha)
-    c2 = cos(beta)
-    c3 = cos(gamma)
-
-    s1 = sin(alpha)
-    s2 = sin(beta)
-    s3 = sin(gamma)
-
-    rot_mat = [
-        c3*c2, -s3*c1 + c3*s2*s1, s3*s1 + c3*s2*c1,
-        s3*c2, c3*c1 + s3*s2*s1, -c3*s1 + s3*s2*c1,
-        -s2,       c2*s1,            c2*c1
-    ]
-
-    rotated = [
-        rot_mat[0]*vector3[0] + rot_mat[1]*vector3[1] + rot_mat[2]*vector3[2],
-        rot_mat[3]*vector3[0] + rot_mat[4]*vector3[1] + rot_mat[5]*vector3[2],
-        rot_mat[6]*vector3[0] + rot_mat[7]*vector3[1] + rot_mat[8]*vector3[2]
-        ]
-    return rotated
+from kinematic_tools.quaternion_rotation import quaternion_rotation
+from kinematic_tools.euler_rotation import vector_3d_rotation
 
 
 def platform_points_2d(long_side: float, short_side: float, height: float = 0,

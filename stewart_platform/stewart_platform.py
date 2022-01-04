@@ -2,7 +2,7 @@ from math import pi, sin, cos
 
 from matplotlib import pyplot as plt
 from matplotlib import animation
-
+from mpl_toolkits.mplot3d import Axes3D
 
 from stochastic_waves.wave_generators import irregular_surface_propagation, body_displacement
 from kinematic_tools.euler_rotation import vector_3d_rotation
