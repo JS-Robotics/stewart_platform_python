@@ -89,6 +89,6 @@ def animate(i):
 # call the animator.  blit=True means only re-draw the parts that have changed.
 anim = animation.FuncAnimation(fig, animate, frames=frames_, interval=20, blit=True)
 
-# anim.save('basic_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
+anim.save('basic_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
 
 plt.show()

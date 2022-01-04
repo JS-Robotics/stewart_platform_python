@@ -4,26 +4,36 @@
     <img src="misc/gifs/platform_animate.gif" width="300" height="300" />
 </p>
 
-[//]: # (![alt text]&#40;misc/figures/thumbnail.png&#41;)
+## Prerequisite
+In order to plot and animate the platform simulation points, the Python package **matplotlib** is required.
 
-https://catlikecoding.com/unity/tutorials/flow/waves/  -- Wave shader
+* Pip install for Python3:
 
-https://www.orcina.com/webhelp/OrcaFlex/Content/html/Vesseltheory,RAOsandphases.htm -- RAO calulation
+      pip3 install matplotlib
 
-https://www.orcina.com/webhelp/OrcaFlex/Content/html/Vesseltheory,RAOqualitychecks.htm -- Phase lags
+## Running the default simulation
 
-https://www.calqlata.com/productpages/00059-help.html -- RAO as Transfer function
+simply execute the file: **main.py**
 
-https://www.usna.edu/NAOE/academics/en400.php -- USNA - EN400
+## Applied theory
 
-https://www.usna.edu/NAOE/academics/en455.php -- USNA - EN455
+#### Wave theory
+The wave elevation at time, t, at distance from calculation origin, x, is calculated with the following equations
+from **DNVGL-CG-0130**
 
-https://rules.dnv.com/docs/pdf/DNV/CG/2018-01/DNVGL-CG-0130.pdf -- DNVGL 0130
+<p align="center">
+    <img src="misc/figures/eq_1.PNG"  />
+</p>
+<p align="center">
+    <img src="misc/figures/eq_2.PNG"  />
+</p>
+<p align="center">
+    <img src="misc/figures/eq_3.PNG"  />
+</p>
+<p align="center">
+    <img src="misc/figures/eq_4.PNG"  />
+</p>
 
+A "raft in slow waves" assumption is made when calculating the 6 degree of freedom body
+displacement's amplitudes and phase lags. 
 
-https://www.calqlata.com/productpages/00081-help.html -- RAO calculations
-Google searches:
-
-    vessel have to pitch phase shift
-
-https://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/ -- Good tutorial for matplotlib animations
