@@ -1,6 +1,10 @@
 # Stewart Platform Inverse Kinematics Simulation with stochastic JONSWAP waves
 
-![alt text](misc/figures/thumbnail.png)
+<p align="center">
+    <img src="misc/gifs/platform_animate.gif" />
+</p>
+
+[//]: # (![alt text]&#40;misc/figures/thumbnail.png&#41;)
 
 https://catlikecoding.com/unity/tutorials/flow/waves/  -- Wave shader
 
