@@ -1,7 +1,7 @@
 # Stewart Platform Inverse Kinematics Simulation with stochastic JONSWAP waves
 
 <p align="center">
-    <img src="misc/gifs/platform_animate.gif" />
+    <img src="misc/gifs/platform_animate.gif" width="350" height="350" />
 </p>
 
 [//]: # (![alt text]&#40;misc/figures/thumbnail.png&#41;)
