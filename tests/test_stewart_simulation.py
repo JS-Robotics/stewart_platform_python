@@ -7,7 +7,8 @@ from stewart_platform import StewartPlatform
 from stochastic_waves.wave_generators import body_displacement
 
 
-platform = StewartPlatform(fixed_long=0.90, fixed_short=0.40, dynamic_long=0.70, dynamic_short=0.30)
+# platform = StewartPlatform(fixed_long=0.90, fixed_short=0.40, dynamic_long=0.70, dynamic_short=0.30)
+platform = StewartPlatform(fixed_long=90, fixed_short=40, dynamic_long=70, dynamic_short=30)
 
 # First set up the figure, the axis, and the plot element we want to animate
 fig = plt.figure()
@@ -21,11 +22,11 @@ leg4, = ax.plot([], [], lw=2, color='black')
 leg5, = ax.plot([], [], lw=2, color='black')
 leg6, = ax.plot([], [], lw=2, color='black')
 
-start = 1
-end = 1
+start = 100
+end = 100
 ax.set_xlim3d(-end, start)
 ax.set_ylim3d(-end, start)
-ax.set_zlim3d(0, 5)
+ax.set_zlim3d(0, 25)
 ax.view_init(elev=25, azim=100)
 ax.set_xlabel('$X$', fontsize=10, rotation=0)
 ax.set_ylabel('$Y$', fontsize=10, rotation=0)
@@ -36,8 +37,8 @@ line2, = ax.plot(x_f, y_f, z_f, color='red', marker='o', label='Quaternion rotat
 
 frames_ = 900
 resolution = frames_
-Tp = 4
-Hs = 10  # 4
+Tp = 8
+Hs = 4  # 4
 wave_frequencies = []
 for n_step in range(resolution):
     wave_frequencies.append(2 * (n_step + 0.001) / resolution)
@@ -59,7 +60,7 @@ ax2.legend()
 
 def animate(i):
     x_p, y_p, z_p = platform.get_dynamic_platform_points()
-    x_p, y_p, z_p = platform.platform_points_3d([x_p, y_p, z_p], [surge[i]/10000, sway[i]/10000, heave[i]/10000 + 2], roll[i]/10, pitch[i]/1000, yaw[i]/1000)
+    x_p, y_p, z_p = platform.platform_points_3d([x_p, y_p, z_p], [surge[i], sway[i], heave[i] + 12], roll[i]/100, pitch[i]/1000, yaw[i]/100)
 
     line.set_data(x_p, y_p)
     line.set_3d_properties(z_p)
