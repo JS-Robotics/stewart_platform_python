@@ -36,7 +36,7 @@ class StewartPlatform:
             self._plot_limits = self._round_up(fixed_long + scaling*fixed_long)
         else:
             self._plot_limits = self._round_up(dynamic_long + scaling*dynamic_long)
-        self._plot_height = self._round_up(home_height + (scaling+0.025)*home_height)
+        self._plot_height = self._round_up(home_height + (scaling+0.625)*home_height)
 
     @staticmethod
     def _generate_platform_points(long_side: float, short_side: float, height: float = 0,
