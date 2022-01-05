@@ -4,16 +4,13 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 from mpl_toolkits.mplot3d import Axes3D
 
-from stochastic_waves.wave_generators import irregular_surface_propagation, body_displacement
+from stochastic_waves.wave_generators import body_displacement
 from kinematic_tools.euler_rotation import vector_3d_rotation
 
 
 class StewartPlatform:
-
-    # def __init__(self, fixed_long, fixed_short, dynamic_long, dynamic_short, home_height=2, fixed_rotation_shift=0,
-    #              dynamic_rotation_shift=(60*3.1415/180)):
-    def __init__(self, fixed_long, fixed_short, dynamic_long, dynamic_short, home_height=2, fixed_rotation_shift=(60*3.1415/180),
-                 dynamic_rotation_shift=0):
+    def __init__(self, fixed_long, fixed_short, dynamic_long, dynamic_short, T_p, H_s, wave_angle, home_height=2,
+                 fixed_rotation_shift=(60*3.1415/180), dynamic_rotation_shift=0):
 
         self._fixed_platform_color = 'red'
         self._dynamic_platform_color = 'blue'
@@ -26,9 +23,20 @@ class StewartPlatform:
 
         self._dynamic_platform_points = self._generate_platform_points(long_side=dynamic_long,
                                                                        short_side=dynamic_short,
-                                                                       height=home_height,
+                                                                       height=0,
                                                                        rotation_shift=dynamic_rotation_shift,
                                                                        debug=False)
+        self._rotation_correction_factor = dynamic_long
+        self._wave_angle = wave_angle
+        self._home_height = home_height
+        self._significant_wave_height = H_s
+        self._wave_period = T_p
+        scaling = 0.225
+        if fixed_long > dynamic_long:
+            self._plot_limits = self._round_up(fixed_long + scaling*fixed_long)
+        else:
+            self._plot_limits = self._round_up(dynamic_long + scaling*dynamic_long)
+        self._plot_height = self._round_up(home_height + (scaling+0.025)*home_height)
 
     @staticmethod
     def _generate_platform_points(long_side: float, short_side: float, height: float = 0,
@@ -60,7 +68,6 @@ class StewartPlatform:
                 applied_gamma + (-1) ** counter * pi / 2 + rotation_shift)
             counter = counter + 1
 
-        # TODO Should this appending be moved somewhere else?
         x_point.append(x_point[0])  # Append the start point as the last to plot all lines with matplotlib
         y_point.append(y_point[0])  # Append the start point as the last to plot all lines with matplotlib
         z_point.append(z_point[0])  # Append the start point as the last to plot all lines with matplotlib
@@ -88,8 +95,8 @@ class StewartPlatform:
         return self._fixed_platform_points
 
     def plot_platforms(self, plot_fixed_platform: bool = True, plot_dynamic_platform: bool = True):
-        # fig = plt.figure()  # TODO is this one necessary ?
-        ax = plt.axes(xlim=(-1, 1), ylim=(-1, 1))  # TODO round up to larges integer of defined platform lengths
+        fig = plt.figure()
+        ax = plt.axes(xlim=(-self._plot_limits, self._plot_limits), ylim=(-self._plot_limits, self._plot_limits))
         if plot_dynamic_platform:
             ax.plot(self._dynamic_platform_points[0], self._dynamic_platform_points[1], label='Dynamic Platform',
                     color=self._dynamic_platform_color, marker='o')
@@ -100,7 +107,7 @@ class StewartPlatform:
         ax.grid(color='black', linestyle='-', linewidth=0.5)
         plt.show()
 
-    def animate(self, plot_wave_date: bool = True):
+    def animate(self, plot_wave_data: bool = True):
         # First set up the figure, the axis, and the plot element we want to animate
         fig = plt.figure()
         ax = plt.axes(projection='3d')
@@ -113,11 +120,11 @@ class StewartPlatform:
         leg5, = ax.plot([], [], lw=2, color='black')
         leg6, = ax.plot([], [], lw=2, color='black')
 
-        start = 100
-        end = 100
+        start = self._plot_limits
+        end = self._plot_limits
         ax.set_xlim3d(-end, start)
         ax.set_ylim3d(-end, start)
-        ax.set_zlim3d(0, 25)
+        ax.set_zlim3d(0, self._plot_height)
         ax.view_init(elev=25, azim=100)
         ax.set_xlabel('$X$', fontsize=10, rotation=0)
         ax.set_ylabel('$Y$', fontsize=10, rotation=0)
@@ -126,17 +133,18 @@ class StewartPlatform:
         x_f, y_f, z_f = self.get_fixed_platform_points()
         line2, = ax.plot(x_f, y_f, z_f, color='red', marker='o', label='Quaternion rotation 90deg')
 
-        frames_ = 900
+        frames_ = 900  # TODO make dynamic
         resolution = frames_
-        Tp = 8
-        Hs = 4  # 4
+        Tp = self._wave_period
+        Hs = self._significant_wave_height
+        wave_angle = self._wave_angle
         wave_frequencies = []
         for n_step in range(resolution):
             wave_frequencies.append(2 * (n_step + 0.001) / resolution)
 
-        heave, surge, sway, roll, pitch, yaw, t_time = body_displacement(wave_frequencies, Hs, Tp, 50)
+        heave, surge, sway, roll, pitch, yaw, t_time = body_displacement(wave_frequencies, Hs, Tp, wave_angle)
 
-        if plot_wave_date:
+        if plot_wave_data:
             figs, (ax1, ax2) = plt.subplots(2)
             line1 = ax1.plot(t_time, heave, label='heave [m]')
             line2 = ax1.plot(t_time, surge, label='surge [m]')
@@ -150,10 +158,13 @@ class StewartPlatform:
             ax2.legend()
 
         x_points, y_points, z_points = self.get_dynamic_platform_points()
+        home_height = self._home_height
+        rot_cor = self._rotation_correction_factor
 
         def animate(i):
-            x_p, y_p, z_p = self.platform_points_3d([x_points, y_points, z_points], [surge[i], sway[i], heave[i] + 12],
-                                                        roll[i] / 100, pitch[i] / 1000, yaw[i] / 100)
+            x_p, y_p, z_p = self.platform_points_3d([x_points, y_points, z_points], [surge[i], sway[i],
+                                                    heave[i] + home_height],
+                                                    roll[i] / rot_cor, pitch[i] / rot_cor, yaw[i] / rot_cor)
 
             line.set_data(x_p, y_p)
             line.set_3d_properties(z_p)
@@ -182,6 +193,8 @@ class StewartPlatform:
         anim = animation.FuncAnimation(fig, animate, frames=frames_, interval=20, blit=True)
 
         # anim.save('basic_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
-
         plt.show()
 
+    @staticmethod
+    def _round_up(number):
+        return int(number) + (number % 1 > 0)

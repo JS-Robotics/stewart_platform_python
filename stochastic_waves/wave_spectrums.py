@@ -5,7 +5,7 @@ from math import exp, pi, log, sqrt
 import numpy as np
 
 # Pierson–Moskowitz (PM) wave spectrum
-def pierson_moskowitz_wave_spectrum(w, T_p, H_s):
+def pierson_moskowitz_wave_spectrum(w, H_s, T_p):
     """
     :param w : The wave frequency [rad/s]
     :param T_p: Significant/mean wave height [m]
@@ -18,7 +18,7 @@ def pierson_moskowitz_wave_spectrum(w, T_p, H_s):
 
 
 # Jonswap (J) wave spectrum
-def jonswap_wave_spectrum(w, T_p, H_s, y=None):
+def jonswap_wave_spectrum(w, H_s, T_p, y=None):
     """
     :param w: The wave frequency [rad/s]
     :param T_p: Significant/mean wave height [m]
@@ -42,7 +42,7 @@ def jonswap_wave_spectrum(w, T_p, H_s, y=None):
     else:
         sigma = 0.09
     a_y = 1 - 0.287 * log(y)  # Which is a normalizing factor
-    s_jonswap = a_y * y**exp(-0.5*((w-w_p)/(sigma*w_p))**2) * pierson_moskowitz_wave_spectrum(w, T_p, H_s)
+    s_jonswap = a_y * y**exp(-0.5*((w-w_p)/(sigma*w_p))**2) * pierson_moskowitz_wave_spectrum(w, H_s, T_p)
     return s_jonswap
 
 
