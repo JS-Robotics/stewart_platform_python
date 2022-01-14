@@ -70,7 +70,7 @@ if __name__ == "__main__":
 
     fig = plt.figure()
     ax = plt.axes(projection='3d')
-    set = 1
+    set = 0
 
     if set ==0 :
         ax.plot3D([0, surge[0], rot_7[0]+surge[0]], [0,    sway[0], rot_7[1]+sway[0]], [0,    heave[0], rot_7[2]+heave[0]], marker='o',  color='red')
@@ -83,6 +83,6 @@ if __name__ == "__main__":
         # ax.plot3D([0, rot_70[0]], [0, rot_70[1]], [0, rot_70[2]], marker='o')
         ax.plot3D([0, rot_700[0]], [0, rot_700[1]], [0, rot_700[2]], marker='o')
         ax.plot3D([0, rot_7000[0]], [0, rot_7000[1]], [0, rot_7000[2]], marker='o')
-        ax.plot3D([0, rot_702[0]], [0, rot_702[1]], [0, rot_702[2]], marker='o')
+        # ax.plot3D([0, rot_702[0]], [0, rot_702[1]], [0, rot_702[2]], marker='o')
 
     plt.show()
