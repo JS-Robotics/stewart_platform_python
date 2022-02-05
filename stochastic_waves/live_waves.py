@@ -51,97 +51,22 @@ def _jonswap_wave_spectrum(w, H_s, T_p, y=None):
 
 
 def live_irregular_wave(t, w, H_s, T_p, y=None, x=None):
-    amplitude = 0
-    phase = 0
     wave_frequencies_length = len(w)
+    surface_elevation = 0
     for wave_frequency in range(wave_frequencies_length):
         if wave_frequency < (wave_frequencies_length - 1):
             delta_omega = w[wave_frequency + 1] - w[wave_frequency]
         else:
             delta_omega = w[wave_frequency] - w[wave_frequency-1]
         s_j = (wave_spectrums.jonswap_wave_spectrum(w[wave_frequency], H_s, T_p, y))
-        amplitude += (sqrt(2 * s_j * delta_omega))
+        amplitude = (sqrt(2 * s_j * delta_omega))
         random.seed((wave_frequency*1 + 6))
-        phase += w[wave_frequency]*t + random.uniform(0, 2*pi)
-        # phase += w[wave_frequency]*t + 0
+        phase = w[wave_frequency]*t + (random.uniform(0, 2*pi))
+        # phase = w[wave_frequency]*t
 
-    return amplitude, phase
+        surface_elevation += amplitude*cos(phase)
 
-
-def body_displacement(w, H_s, T_p, wave_direction=0, y=None, x=None):
-    # sim_time, surface_propagation = irregular_surface_propagation(w, H_s, T_p, y, x)
-    angle = wave_direction * pi / 180  # Convert from deg to rad
-    heave = []
-    surge = []
-    sway = []
-    roll = []
-    pitch = []
-    yaw = []
-
-    sim_time = []  # TODO make dynamic
-    time_resolution = 3000  # TODO make a better method of adding a simulation time
-    for n in range(time_resolution):
-        sim_time.append(60*n/time_resolution)
-
-    # Determining amplitude factor on body (slender vessel)
-    # heave_amp is always 1
-    surge_amp = _absolute_value(cos(angle))
-    sway_amp = _absolute_value(sin(angle))
-    roll_amp = _absolute_value(sin(angle))
-    pitch_amp = _absolute_value(cos(angle))
-    yaw_amp = _absolute_value(0.5 * sin(2*angle))
-
-    # Determining phase lag
-    # have_phase is always 0rad for any direction
-    if cos(angle) >= 0:
-        surge_phase = pi/2  # 90deg
-        pitch_phase = -pi/2  # -90deg
-    else:
-        surge_phase = -pi / 2  # 90deg
-        pitch_phase = pi / 2  # -90deg
-
-    if sin(angle) >= 0:
-        sway_phase = pi/2  # 90deg
-        roll_phase = pi/2  # 90deg
-    else:
-        sway_phase = -pi / 2  # 90deg
-        roll_phase = -pi / 2  # 90deg
-
-    if sin(2*angle) >= 0:
-        yaw_phase = pi
-    else:
-        yaw_phase = 0
-
-    print(f"surge_amp = {surge_amp}")
-    print(f"sway_amp = {sway_amp}")
-    print(f"roll_amp = {roll_amp}")
-    print(f"pitch_amp = {pitch_amp}")
-    print(f"yaw_amp = {yaw_amp}")
-
-    amps, phases = live_irregular_wave(w, H_s, T_p, y, x)
-    for i in range(len(sim_time)):
-        _heave = 0
-        _surge = 0
-        _sway = 0
-        _roll = 0
-        _pitch = 0
-        _yaw = 0
-        for freq in range(len(w)):
-            _heave = _heave + (amps[freq] * cos(w[freq]*sim_time[i] + phases[freq]))
-            _surge = _surge + (surge_amp * amps[freq] * cos(w[freq]*sim_time[i] + phases[freq] + surge_phase))
-            _sway = _sway + (sway_amp * amps[freq] * cos(w[freq]*sim_time[i] + phases[freq] + sway_phase))
-            _roll = _roll + (roll_amp * amps[freq] * cos(w[freq]*sim_time[i] + phases[freq] + roll_phase))
-            _pitch = _pitch + (pitch_amp * amps[freq] * cos(w[freq]*sim_time[i] + phases[freq] + pitch_phase))
-            _yaw = _yaw + (yaw_amp * amps[freq] * cos(w[freq]*sim_time[i] + phases[freq] + yaw_phase))
-
-        heave.append(_heave)
-        surge.append(_surge)
-        sway.append(_sway)
-        roll.append(_roll)
-        pitch.append(_pitch)
-        yaw.append(_yaw)
-
-    return heave, surge, sway, roll, pitch, yaw, sim_time
+    return surface_elevation
 
 
 def _absolute_value(value):
@@ -190,10 +115,10 @@ if __name__ == "__main__":
 
         def animate(i):
             t = timer.get_elapsed_time()
-            a, phi = live_irregular_wave(t, wave_frequencies, Tp, Hs)
-            print(f"a: {a}, phi: {phi}, time: {t}")
+            a = live_irregular_wave(t, wave_frequencies, Tp, Hs)
+            print(f"a: {a}, time: {t}")
             x = 0
-            y = a*cos(phi/10)
+            y = a
             x = [x-0.001, x]
             y = [y-0.001, y]
             line.set_data(x, y)
@@ -221,5 +146,21 @@ if __name__ == "__main__":
                 print("Keyboard interrupt detecting: stopping...")
                 run = False
 
+    if test == 3:
+        fig = plt.figure()
+
+        sim_time = []  # TODO make dynamic
+        elev = []
+        time_resolution = 3000  # TODO make a better method of adding a simulation time
+        for n in range(time_resolution):
+            sim_time.append(60 * n / time_resolution)
+
+        for time in sim_time:
+                elev.append(live_irregular_wave(time, wave_frequencies, 4, 8))  # HS, TP
+
+        ax = plt.axes(xlim=(0, 60), ylim=(-Hs, Hs))
+        line, = ax.plot(sim_time, elev)
+        plt.grid(color='black', linestyle='-', linewidth=0.5)
+        plt.show()
 
 
